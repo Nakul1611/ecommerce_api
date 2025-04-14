@@ -2,6 +2,22 @@
 
 class Users::RegistrationsController < Devise::RegistrationsController
   respond_to :json
+
+  private
+
+  def respond_with(resource, _opts = {})
+    if resource.persisted?
+      render json: {
+        status: { code: 200, message: 'Signed up successfully.' },
+        data: UserSerializer.new(resource)
+      }, status: :ok
+    else
+      render json: {
+        status: { code: 422, message: "Sign up failed: #{resource.errors.full_messages.join(', ')}" }
+      }, status: :unprocessable_entity
+    end
+  end
+
   # before_action :configure_sign_up_params, only: [:create]
   # before_action :configure_account_update_params, only: [:update]
 
