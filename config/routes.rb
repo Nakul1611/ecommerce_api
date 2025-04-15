@@ -31,7 +31,7 @@ Rails.application.routes.draw do
     resources :products, except: [:new, :edit]
 
     resources :products do
-      resources :product_variants, except: [:new, :edit]
+      resources :variants, except: [:new, :edit]
     end
   end
 

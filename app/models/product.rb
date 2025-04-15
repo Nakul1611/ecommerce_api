@@ -11,8 +11,8 @@ class Product < ApplicationRecord
   private
 
   def must_have_at_least_one_variant
-    if product_variants.reject(&:marked_for_destruction?).empty?
-      errors.add(:product_variants, "must have at least one variant")
+    if variants.reject(&:marked_for_destruction?).empty?
+      errors.add(:variants, "must have at least one variant")
     end
   end
 end

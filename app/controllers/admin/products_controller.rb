@@ -41,7 +41,7 @@ module Admin
     def product_params
       params.require(:product).permit(
         :name, :description, :price, :category_id,
-        product_variants_attributes: [
+        variants_attributes: [
           :id, :sku, :price_override, :stock, :size, :color, :is_active, :_destroy
         ]
       )

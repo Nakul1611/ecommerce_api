@@ -4,7 +4,7 @@ module Admin
     before_action :set_variant, only: [:show, :update, :destroy]
 
     def index
-      render json: @product.product_variants
+      render json: @product.variants
     end
 
     def show
@@ -12,7 +12,7 @@ module Admin
     end
 
     def create
-      variant = @product.product_variants.new(variant_params)
+      variant = @product.variants.new(variant_params)
       if variant.save
         render json: variant, status: :created
       else
@@ -40,11 +40,11 @@ module Admin
     end
 
     def set_variant
-      @variant = @product.product_variants.find(params[:id])
+      @variant = @product.variants.find(params[:id])
     end
 
     def variant_params
-      params.require(:product_variant).permit(:sku, :price_override, :stock, :size, :color, :is_active)
+      params.require(:variant).permit(:sku, :price_override, :stock, :size, :color, :is_active)
     end
   end
 end

@@ -4,10 +4,10 @@ module Api::V1
     before_action :set_cart
 
     def create
-      item = @cart.cart_items.find_or_initialize_by(product_variant_id: cart_item_params[:product_variant_id])
+      item = @cart.cart_items.find_or_initialize_by(variant_id: cart_item_params[:variant_id])
       item.quantity += cart_item_params[:quantity].to_i
       if item.save
-        render json: item, include: :product_variant, status: :created
+        render json: item, include: :variant, status: :created
       else
         render json: { errors: item.errors.full_messages }, status: :unprocessable_entity
       end
@@ -16,7 +16,7 @@ module Api::V1
     def update
       item = @cart.cart_items.find(params[:id])
       if item.update(cart_item_params)
-        render json: item, include: :product_variant
+        render json: item, include: :variant
       else
         render json: { errors: item.errors.full_messages }, status: :unprocessable_entity
       end
@@ -35,7 +35,7 @@ module Api::V1
     end
 
     def cart_item_params
-      params.require(:cart_item).permit(:product_variant_id, :quantity)
+      params.require(:cart_item).permit(:variant_id, :quantity)
     end
   end
 end

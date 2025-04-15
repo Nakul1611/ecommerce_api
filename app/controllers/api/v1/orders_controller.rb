@@ -3,13 +3,13 @@ module Api::V1
     before_action :authenticate_user!
 
     def index
-      orders = current_user.orders.includes(order_items: :product_variant)
-      render json: orders, include: { order_items: { include: :product_variant } }
+      orders = current_user.orders.includes(order_items: :variant)
+      render json: orders, include: { order_items: { include: :variant } }
     end
 
     def show
       order = current_user.orders.find(params[:id])
-      render json: order, include: { order_items: { include: :product_variant } }
+      render json: order, include: { order_items: { include: :variant } }
     end
 
     def create
@@ -27,11 +27,11 @@ module Api::V1
 
         total = 0
         cart.cart_items.each do |item|
-          price = item.product_variant.price_override || item.product_variant.product.price
+          price = item.variant.price_override || item.variant.product.price
           total += price * item.quantity
 
           order.order_items.create!(
-            product_variant: item.product_variant,
+            variant: item.variant,
             quantity: item.quantity,
             price: price
           )
@@ -40,7 +40,7 @@ module Api::V1
         order.update!(total_price: total)
         cart.cart_items.destroy_all
 
-        render json: order, include: { order_items: { include: :product_variant } }, status: :created
+        render json: order, include: { order_items: { include: :variant } }, status: :created
       end
     rescue => e
       render json: { error: e.message }, status: :unprocessable_entity
