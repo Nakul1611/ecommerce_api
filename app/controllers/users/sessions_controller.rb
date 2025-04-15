@@ -33,6 +33,11 @@ class Users::SessionsController < Devise::SessionsController
         message: "Couldn't find an active session."
       }, status: :unauthorized
     end
+  rescue JWT::DecodeError
+    render json: {
+      status: 401,
+      message: 'Invalid token'
+    }, status: :unauthorized
   end
 
   # before_action :configure_sign_in_params, only: [:create]
